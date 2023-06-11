@@ -387,62 +387,60 @@ with tab4:
                     else:
                         topicos_relevantes_2.append(place_topico)
 
-            col_1, col_2 = st.columns(2)
-            with col_1:
-                # st.markdown(f'''#### {place_id_1}''')
-                for topico in topicos_relevantes_1:
-                    st.markdown(f'''* {dict_topic_labels[topico]}''')
-                    place_df = place_1_text_df[place_1_text_df['topic'] == topico].head(2)
-                    place_df = place_df.sort_values('stars', ascending=False)
-                    for index, row in place_df.iterrows():
-                        st.markdown(f'''** Estrellas:* {row['stars']}''')
-                        st.markdown(f'''** Review:* {row['review']}''')
+            if len(topicos_relevantes_1) + len(topicos_relevantes_2) == 0:
+                st.markdown(f'''No hay topicos discriminantes''')
+            else:
+                col_1, col_2 = st.columns(2)
+                with col_1:
+                    # st.markdown(f'''#### {place_id_1}''')
+                    for topico in topicos_relevantes_1:
+                        st.markdown(f'''* {dict_topic_labels[topico]}''')
+                        place_df = place_1_text_df[place_1_text_df['topic'] == topico].head(2)
+                        place_df = place_df.sort_values('stars', ascending=False)
+                        for index, row in place_df.iterrows():
+                            st.markdown(f'''** Estrellas:* {row['stars']}''')
+                            st.markdown(f'''** Review:* {row['review']}''')
+                            st.markdown(f'''---''')
                         st.markdown(f'''---''')
-                    st.markdown(f'''---''')
-            with col_2:
-                # st.markdown(f'''#### {place_id_2}''')
-                for topico in topicos_relevantes_2:
-                    st.markdown(f'''* {dict_topic_labels[topico]}''')
-                    place_df = place_2_text_df[place_2_text_df['topic'] == topico].head(2)
-                    place_df = place_df.sort_values('stars', ascending=False)
-                    for index, row in place_df.iterrows():
-                        st.markdown(f'''** Estrellas:* {row['stars']}''')
-                        st.markdown(f'''** Review:* {row['review']}''')
+                with col_2:
+                    # st.markdown(f'''#### {place_id_2}''')
+                    for topico in topicos_relevantes_2:
+                        st.markdown(f'''* {dict_topic_labels[topico]}''')
+                        place_df = place_2_text_df[place_2_text_df['topic'] == topico].head(2)
+                        place_df = place_df.sort_values('stars', ascending=False)
+                        for index, row in place_df.iterrows():
+                            st.markdown(f'''** Estrellas:* {row['stars']}''')
+                            st.markdown(f'''** Review:* {row['review']}''')
+                            st.markdown(f'''---''')
                         st.markdown(f'''---''')
-                    st.markdown(f'''---''')
 
-            places_df = pd.concat([place_1_text_df, place_2_text_df], axis=0).reset_index(drop=True)
-            places_df['topic'] = [x if x in list(set(topicos_relevantes_1 + topicos_relevantes_2)) else -1 for x in places_df['topic']]
-            fig = go.Figure()
-            _df = places_df[places_df['topic'] == -1]
-            fig.add_trace(go.Scatter(x=_df['x'], y=_df['y'], hovertext=_df['review'], hoverinfo='text', mode='markers+text', name='Sin tópico', marker=dict(color='#CFD8DC', size=5, opacity=0.5), showlegend=False))
-            all_topics = sorted(places_df['topic'].unique())
-            for topic in all_topics:
-                if int(topic) == -1:
-                    continue
-                selection = places_df[places_df['topic'] == topic]
-                label_name = dict_topic_labels[topic]
-                fig.add_trace(
-                    go.Scatter(x=selection['x'], y=selection['y'], hovertext=selection['review'], hoverinfo='text',
-                               mode='markers+text', name=label_name, marker=dict(size=5, opacity=0.5)))
-            x_range = [places_df['x'].min() - abs(places_df['x'].min() * 0.15), places_df['x'].max() + abs(places_df['x'].max() * 0.15)]
-            y_range = [places_df['y'].min() - abs(places_df['y'].min() * 0.15), places_df['y'].max() + abs(places_df['y'].max() * 0.15)]
-            fig.add_shape(type="rect", x0=sum(x_range) / 2, y0=y_range[0], x1=sum(x_range) / 2, y1=y_range[1],
-                          line=dict(color="#CFD8DC", width=2))
-            fig.add_shape(type="rect", x0=x_range[0], y0=sum(y_range) / 2, x1=x_range[1], y1=sum(y_range) / 2,
-                          line=dict(color="#CFD8DC", width=2))
-            fig.add_annotation(x=x_range[0], y=sum(y_range) / 2, text="D1", showarrow=False, yshift=10)
-            fig.add_annotation(x=sum(x_range) / 2, y=y_range[1], text="D2", showarrow=False, xshift=10)
-            fig.update_layout(template='simple_white',
-                              title={'text': "<b>", 'x': 0.5, 'xanchor': 'center', 'yanchor': 'top',
-                                     'font': dict(size=22, color='Black')})
-            fig.update_xaxes(visible=False)
-            fig.update_yaxes(visible=False)
-            fig.update_layout(width=WIDTH * 1.5, height=HEIGHT * 1.5)
-            st.plotly_chart(fig, use_container_width=True)
-
-
-
-
-
+                places_df = pd.concat([place_1_text_df, place_2_text_df], axis=0).reset_index(drop=True)
+                places_df['topic'] = [x if x in list(set(topicos_relevantes_1 + topicos_relevantes_2)) else -1 for x in places_df['topic']]
+                fig = go.Figure()
+                _df = places_df[places_df['topic'] == -1]
+                fig.add_trace(go.Scatter(x=_df['x'], y=_df['y'], hovertext=_df['review'], hoverinfo='text', mode='markers+text', name='Sin tópico', marker=dict(color='#CFD8DC', size=5, opacity=0.5), showlegend=False))
+                all_topics = sorted(places_df['topic'].unique())
+                for topic in all_topics:
+                    if int(topic) == -1:
+                        continue
+                    selection = places_df[places_df['topic'] == topic]
+                    label_name = dict_topic_labels[topic]
+                    fig.add_trace(
+                        go.Scatter(x=selection['x'], y=selection['y'], hovertext=selection['review'], hoverinfo='text',
+                                   mode='markers+text', name=label_name, marker=dict(size=5, opacity=0.5)))
+                x_range = [places_df['x'].min() - abs(places_df['x'].min() * 0.15), places_df['x'].max() + abs(places_df['x'].max() * 0.15)]
+                y_range = [places_df['y'].min() - abs(places_df['y'].min() * 0.15), places_df['y'].max() + abs(places_df['y'].max() * 0.15)]
+                fig.add_shape(type="rect", x0=sum(x_range) / 2, y0=y_range[0], x1=sum(x_range) / 2, y1=y_range[1],
+                              line=dict(color="#CFD8DC", width=2))
+                fig.add_shape(type="rect", x0=x_range[0], y0=sum(y_range) / 2, x1=x_range[1], y1=sum(y_range) / 2,
+                              line=dict(color="#CFD8DC", width=2))
+                fig.add_annotation(x=x_range[0], y=sum(y_range) / 2, text="D1", showarrow=False, yshift=10)
+                fig.add_annotation(x=sum(x_range) / 2, y=y_range[1], text="D2", showarrow=False, xshift=10)
+                fig.update_layout(template='simple_white',
+                                  title={'text': "<b>", 'x': 0.5, 'xanchor': 'center', 'yanchor': 'top',
+                                         'font': dict(size=22, color='Black')})
+                fig.update_xaxes(visible=False)
+                fig.update_yaxes(visible=False)
+                fig.update_layout(width=WIDTH * 1.5, height=HEIGHT * 1.5)
+                st.plotly_chart(fig, use_container_width=True)
 
