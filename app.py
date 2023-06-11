@@ -14,9 +14,11 @@ from scipy.stats import chi2_contingency
 
 # directory = '/media/jahaziel/Datos/proyectos/Smarketing/dataset/Google_Reviews/Bilbao/2023-06-11/'
 
-print(__file__)
+# print(__file__)
 
 directory = __file__.split('app.py')[0]
+
+st.set_page_config(page_title='Prueba Google Reviews', layout='wide')
 
 
 WIDTH = 1000
