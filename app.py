@@ -153,7 +153,7 @@ with tab1:
     fig.update_xaxes(showgrid=True)
     fig.update_yaxes(showgrid=True)
     fig.update_layout( yaxis_title="Normalized Frequency" if normalize_frequency else "Frequency", template="simple_white", hoverlabel=dict(bgcolor="white", font_size=16, font_family="Rockwell"))
-    fig.update_layout(width=WIDTH, height=HEIGHT)
+    fig.update_layout(width=WIDTH * 1.5, height=HEIGHT)
     st.plotly_chart(fig)
 
 
@@ -247,7 +247,7 @@ with tab2:
     fig.update_layout(yaxis_title="Normalized Frequency" if normalize_frequency else "Frequency",
                       template="simple_white",
                       hoverlabel=dict(bgcolor="white", font_size=16, font_family="Rockwell"))
-    fig.update_layout(width=WIDTH, height=HEIGHT)
+    fig.update_layout(width=WIDTH * 1.5, height=HEIGHT)
     st.plotly_chart(fig)
 
     st.markdown(f'''### Principales comentarios por tópico ''')
