@@ -12,11 +12,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.stats import chi2_contingency
 
 
-directory = '/media/jahaziel/Datos/proyectos/Smarketing/dataset/Google_Reviews/Donosti/2023-06-14/'
+# directory = '/media/jahaziel/Datos/proyectos/Smarketing/dataset/Google_Reviews/Donosti/2023-06-14/'
 
 # print(__file__)
 
-# directory = __file__.split('app.py')[0]
+directory = __file__.split('app.py')[0]
 
 st.set_page_config(page_title='Prueba Google Reviews', layout='wide')
 
