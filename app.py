@@ -12,11 +12,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.stats import chi2_contingency
 
 
-# directory = '/media/jahaziel/Datos/proyectos/Smarketing/dataset/Google_Reviews/Bilbao/2023-06-11/'
+directory = '/media/jahaziel/Datos/proyectos/Smarketing/dataset/Google_Reviews/Donosti/2023-06-14/'
 
 # print(__file__)
 
-directory = __file__.split('app.py')[0]
+# directory = __file__.split('app.py')[0]
 
 st.set_page_config(page_title='Prueba Google Reviews', layout='wide')
 
@@ -55,6 +55,24 @@ topics_over_time_df = topics_over_time_df.reset_index(drop=True)
 
 dict_topic_labels = dict(zip(topic_labels_df['Topic'], topic_labels_df['Name']))
 
+
+names = list(set(text_df['name']))
+place_id_new_names = {}
+for name in names:
+    _df = text_df[text_df['name'] == name]
+    place_ids = list(set(_df['place_id']))
+    if len(place_ids) == 1:
+        place_id_new_names[place_ids[0]] = name
+    else:
+        for enum, place_id in enumerate(place_ids):
+            place_id_new_names[place_id] = f'''{name} ({enum})'''
+
+
+text_df['place_id'] = text_df['place_id'].map(place_id_new_names)
+best_text_by_topics_df['place_id'] = best_text_by_topics_df['place_id'].map(place_id_new_names)
+
+
+text_df['stars'].fillna(0, inplace=True)
 
 # ====================================================================================================
 
